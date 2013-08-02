@@ -68,6 +68,8 @@ set scrolloff=5
 set mouse=a
 set laststatus=2 " always show the status bar
 set nocompatible
+set noswapfile
+set nobackup
 set nowrap
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 " set clipboard=unnamed
