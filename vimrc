@@ -70,6 +70,7 @@ set laststatus=2 " always show the status bar
 set nocompatible
 set noswapfile
 set nobackup
+set nowritebackup
 set nowrap
 set backspace=indent,eol,start " allow backspacing over everything in insert mode
 " set clipboard=unnamed
