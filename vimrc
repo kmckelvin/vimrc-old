@@ -181,6 +181,16 @@ autocmd User Rails Rnavcommand jcollection app/assets/javascripts/collections -g
 autocmd User Rails Rnavcommand jrouter     app/assets/javascripts/routers     -glob=**/*  -suffix=.coffee
 autocmd User Rails Rnavcommand jspec       spec/javascripts                   -glob=**/*  -suffix=.coffee
 
+" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
+" Source: https://github.com/thoughtbot/dotfiles/blob/master/vimrc
+if executable('ag')
+  " Use Ag over Grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+endif
+
 if has("autocmd")
   " Also load indent files, to automatically do language-dependent indenting.
   filetype plugin indent on
