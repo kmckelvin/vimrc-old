@@ -29,6 +29,7 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'guns/vim-clojure-static'
 Bundle 'tpope/vim-fireplace'
 
+
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
 
@@ -41,6 +42,7 @@ let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
+let g:syntastic_check_on_open=1
 
 set t_Co=256
 colorscheme grb256
