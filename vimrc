@@ -48,6 +48,7 @@ set t_Co=256
 colorscheme grb256
 
 set splitright
+set splitbelow
 
 if has('mouse_sgr')
   set ttymouse=sgr
