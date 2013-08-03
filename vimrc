@@ -63,8 +63,10 @@ hi CursorLine term=bold cterm=bold ctermbg=234
 
 set incsearch
 set hlsearch
+noh " clear the initial highlight after sourcing
 set ignorecase smartcase
 set number
+set relativenumber
 set scrolloff=5
 set mouse=a
 set laststatus=2 " always show the status bar
