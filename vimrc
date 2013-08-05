@@ -45,6 +45,8 @@ let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
 let g:syntastic_check_on_open=1
 
+filetype plugin indent on
+
 set t_Co=256
 colorscheme grb256
 
@@ -200,7 +202,6 @@ endif
 
 if has("autocmd")
   " Also load indent files, to automatically do language-dependent indenting.
-  filetype plugin indent on
 
   " Put these in an autocmd group, so that we can delete them easily.
   augroup vimrcEx
