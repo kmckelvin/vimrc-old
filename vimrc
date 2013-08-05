@@ -122,7 +122,7 @@ map <leader>vi :tabe ~/.vimrc<CR>
 map <leader>td :tabe ~/Dropbox/todo.txt<CR>
 map <leader>vs :source ~/.vimrc<CR>
 
-map <leader>gs :Gstatus<CR>
+map <silent> <leader>gs :Gstatus<CR>/not staged<CR>/modified<CR>
 map <leader>gc :Gcommit<CR>
 map <leader>gw :!git add . && git commit -m "WIP"
 
