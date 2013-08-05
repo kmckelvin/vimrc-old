@@ -161,7 +161,7 @@ map <leader>mk :wincmd K<CR>
 map <leader>ml :wincmd L<CR>
 
 " flip left and right panes
-map <leader>mm :NERDTreeTabsClose<CR>:wincmd l<CR>:wincmd H<CR>:NERDTreeTabsOpen<CR>:wincmd l<CR>
+map <leader>mm :NERDTreeTabsClose<CR>:wincmd l<CR>:wincmd H<CR>:NERDTreeTabsOpen<CR>:wincmd l<CR><C-W>=
 
 " restart pow
 map <leader>rp :!touch tmp/restart.txt<CR><CR>
