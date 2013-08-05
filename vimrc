@@ -62,7 +62,7 @@ let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 
 " line highlighting
 set cursorline
-hi CursorLine term=bold cterm=bold ctermbg=234
+hi CursorLine term=bold cterm=bold ctermbg=233
 
 set incsearch
 set hlsearch
@@ -124,6 +124,7 @@ map <leader>vs :source ~/.vimrc<CR>
 
 map <leader>gs :Gstatus<CR>
 map <leader>gc :Gcommit<CR>
+map <leader>gw :!git add . && git commit -m "WIP"
 
 map <leader>bn :bn<CR>
 map <leader>bp :bp<CR>
