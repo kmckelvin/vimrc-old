@@ -28,6 +28,7 @@ Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'terryma/vim-multiple-cursors'
 Bundle 'guns/vim-clojure-static'
 Bundle 'tpope/vim-fireplace'
+Bundle 'jwhitley/vim-matchit'
 
 
 " autoindent with two spaces, always expand tabs
