@@ -25,7 +25,13 @@ Bundle 'terryma/vim-multiple-cursors'
 Bundle 'guns/vim-clojure-static'
 Bundle 'tpope/vim-fireplace'
 Bundle 'jwhitley/vim-matchit'
-
+Bundle 't9md/vim-ruby-xmpfilter'
+Bundle 'michaeljsmith/vim-indent-object'
+Bundle 'thoughtbot/vim-rspec'
+Bundle 'jgdavey/tslime.vim'
+Bundle 'csexton/trailertrash.vim'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'vim-scripts/YankRing.vim'
 
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
@@ -40,6 +46,7 @@ let delimitMate_expand_space = 1
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
 let g:syntastic_check_on_open=1
+let g:rspec_command = 'call SendToTmux("zeus test {spec}\n")'
 
 filetype plugin indent on
 
@@ -53,8 +60,13 @@ if has('mouse_sgr')
   set ttymouse=sgr
 endif
 
-let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+if $TMUX != ""
+  let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
+  let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+else
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
 
 " line highlighting
 set cursorline
@@ -87,9 +99,12 @@ set showmatch
 set wildmenu
 set wildmode=longest,list
 
+let g:yankring_replace_n_pkey = '<C-;>'
+
 let mapleader=","
-inoremap <c-s> <c-c>:w<CR>
+inoremap <c-s> <esc>:w<CR>
 map <c-s> <c-c>:w<CR>
+cmap w!! %!sudo tee > /dev/null %
 
 " navigate panes with <c-hhkl>
 nmap <silent> <c-k> :wincmd k<CR>
@@ -101,27 +116,49 @@ map <leader>. :noh<CR>
 map <leader>n :NERDTreeTabsToggle<CR>
 map <leader>ff :NERDTreeFind<CR>
 
+" xmpfilter
+map <F10> <Plug>(xmpfilter-run)
+map <F9> <Plug>(xmpfilter-mark)
+
 " paste, fix indentation and clear the mark by default
 nnoremap p p=`]`<esc>
 
-nmap <leader>gp :exec ':Git push origin ' . fugitive#head()<CR>
-nmap <leader>ghp :exec ':Git push heroku ' . fugitive#head()<CR>
+if $TMUX != ""
+  nmap <leader>ggf :call SendToTmux("ggf && ggmc\n")<CR>
+  nmap <leader>gp :call SendToTmux("gpoc\n")<CR>
+  map <leader>bi :call SendToTmux("bundle\n")<CR>
+  map <leader>rz :!tmux send-keys -tzeus C-c zeus space start enter<CR><CR>
+  nmap <leader>tc :!tmux send-keys -tvim.1 C-c<CR><CR>:echo "Sent C-c to tmux"<CR>
+  nmap <leader>dbm :call SendToTmux("zeus rake db:migrate\n")<CR>
+  nmap <leader>dbr :call SendToTmux("zeus rake db:rollback\n")<CR>
+  nmap <leader>dbn :call SendToTmux("zeus rake db:rollback && zeus rake db:migrate\n")<CR>
+  nmap <leader>dbt :call SendToTmux("zeus rake db:test:prepare\n")<CR>
+else
+  map <leader>bi :!bundle<CR>
+  nmap <leader>gp :exec ':Git push origin ' . fugitive#head()<CR>
+  map <leader>dbm :!zeus rake db:migrate<CR>
+  map <leader>dbr :!zeus rake db:rollback<CR>
+  nmap <leader>dbt :!zeus rake db:test:prepare<CR>
+endif
+
+map <leader>bu :!bundle update<space>
+
 nmap <leader>bx :!bundle exec<space>
 nmap <leader>zx :!zeus<space>
 map <leader>vbi :BundleInstall<CR>
 map <leader>vbu :BundleUpdate<CR>
 
-map <leader>bi :!bundle<CR>
-map <leader>bu :!bundle update<space>
+nmap <leader>o ddko
+
 
 map <leader>vi :tabe ~/.vimrc<CR>
+map <leader>vt :tabe ~/.tmux.conf<CR>
 map <leader>td :tabe ~/Dropbox/todo.txt<CR>
 map <leader>tb :tabe ~/Dropbox/blog.txt<CR>
 map <leader>vs :source ~/.vimrc<CR>
 
 map <silent> <leader>gs :Gstatus<CR>/not staged<CR>/modified<CR>
 map <leader>gc :Gcommit<CR>
-map <leader>gw :!git add . && git commit -m "WIP"
 
 map <leader>bn :bn<CR>
 map <leader>bp :bp<CR>
@@ -135,10 +172,15 @@ map <leader>= <C-w>=
 imap <c-e> <c-o>$
 imap <c-a> <c-o>^
 
-map <leader>tt :Tabularize /=<CR>
+" tab for equals
+map <leader>te :Tab/^[^=]*\zs/l0l1<CR>
+" tab for hash/json syntax
+map <leader>th :Tab/^[^:]*\zs/l0l1<CR>
 
-map <leader>rt :call RunCurrentTest()<CR>
-map <leader>rl :call RunCurrentLineInTest()<CR>
+map <leader>rm <Plug>SetTmuxVars
+map <leader>ta :call RunAllSpecs()<CR>
+map <leader>tt :call RunCurrentSpecFile()<CR>
+map <leader>tl :call RunNearestSpec()<CR>
 map <leader>rrt :call RunCurrentTestNoZeus()<CR>
 map <leader>rrl :call RunCurrentLineInTestNoZeus()<CR>
 map <leader>rj :!~/Code/chrome-reload<CR><CR>
@@ -161,7 +203,7 @@ map <leader>ml :wincmd L<CR>
 map <leader>mm :NERDTreeTabsClose<CR>:wincmd l<CR>:wincmd H<CR>:NERDTreeTabsOpen<CR>:wincmd l<CR><C-W>=
 
 " restart pow
-map <leader>rp :!touch tmp/restart.txt<CR><CR>
+map <leader>rp :!touch tmp/restart.txt<CR><CR>:echo "Restarted server"<CR>
 
 " select the current method in ruby (or it block in rspec)
 map <leader>sm /end<CR>?\<def\>\\|\<it\><CR>:noh<CR>V%
