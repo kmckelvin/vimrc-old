@@ -31,7 +31,8 @@ Bundle 'thoughtbot/vim-rspec'
 Bundle 'jgdavey/tslime.vim'
 Bundle 'csexton/trailertrash.vim'
 Bundle 'Lokaltog/vim-easymotion'
-Bundle 'vim-scripts/YankRing.vim'
+Bundle 'textobj-user'
+Bundle 'textobj-rubyblock'
 
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
@@ -47,6 +48,7 @@ let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
 let g:syntastic_check_on_open=1
 let g:rspec_command = 'call SendToTmux("zeus test {spec}\n")'
+let NERDTreeShowHidden=1
 
 filetype plugin indent on
 
