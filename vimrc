@@ -7,6 +7,8 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-fugitive'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-rake'
+Bundle 'tpope/vim-bundler'
 Bundle 'Raimondi/delimitMate'
 Bundle 'adamlowe/vim-slurper'
 Bundle 'kien/ctrlp.vim'
@@ -30,9 +32,10 @@ Bundle 'michaeljsmith/vim-indent-object'
 Bundle 'thoughtbot/vim-rspec'
 Bundle 'jgdavey/tslime.vim'
 Bundle 'csexton/trailertrash.vim'
-Bundle 'Lokaltog/vim-easymotion'
 Bundle 'textobj-user'
 Bundle 'textobj-rubyblock'
+Bundle 'jnwhiteh/vim-golang'
+Bundle 'christoomey/vim-tmux-navigator'
 
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
@@ -47,7 +50,7 @@ let delimitMate_expand_space = 1
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
 let g:syntastic_check_on_open=1
-let g:rspec_command = 'call SendToTmux("zeus test {spec}\n")'
+let g:rspec_command = 'call SendToTmux(" (test -e .zeus.sock && zeus test {spec}) || (test ! -e .zeus.sock && nocorrect bundle exec rspec {spec})\n")'
 let NERDTreeShowHidden=1
 
 filetype plugin indent on
@@ -101,18 +104,18 @@ set showmatch
 set wildmenu
 set wildmode=longest,list
 
-let g:yankring_replace_n_pkey = '<C-;>'
-
 let mapleader=","
 inoremap <c-s> <esc>:w<CR>
 map <c-s> <c-c>:w<CR>
 cmap w!! %!sudo tee > /dev/null %
 
 " navigate panes with <c-hhkl>
-nmap <silent> <c-k> :wincmd k<CR>
-nmap <silent> <c-j> :wincmd j<CR>
-nmap <silent> <c-h> :wincmd h<CR>
-nmap <silent> <c-l> :wincmd l<CR>
+" nmap <silent> <c-k> :wincmd k<CR>
+" nmap <silent> <c-j> :wincmd j<CR>
+" nmap <silent> <c-h> :wincmd h<CR>
+" nmap <silent> <c-l> :wincmd l<CR>
+
+map <leader>, <C-^>
 
 map <leader>. :noh<CR>
 map <leader>n :NERDTreeTabsToggle<CR>
@@ -161,9 +164,14 @@ map <leader>vs :source ~/.vimrc<CR>
 
 map <silent> <leader>gs :Gstatus<CR>/not staged<CR>/modified<CR>
 map <leader>gc :Gcommit<CR>
+map <leader>gpr :call SendToTmux("gpr\n")<CR><CR>
 
-map <leader>bn :bn<CR>
-map <leader>bp :bp<CR>
+map <leader>gr :edit config/routes.rb<CR>
+map <leader>gg :edit Gemfile<CR>
+
+map <leader>gj :CtrlP app/assets/javascripts/<CR>
+map <leader>ga :CtrlP app<CR>
+map <leader>gt :CtrlP spec<CR>
 
 map <leader>tp :tabp<CR>
 map <leader>tn :tabn<CR>
@@ -180,9 +188,9 @@ map <leader>te :Tab/^[^=]*\zs/l0l1<CR>
 map <leader>th :Tab/^[^:]*\zs/l0l1<CR>
 
 map <leader>rm <Plug>SetTmuxVars
-map <leader>ta :call RunAllSpecs()<CR>
-map <leader>tt :call RunCurrentSpecFile()<CR>
-map <leader>tl :call RunNearestSpec()<CR>
+map <leader>ta :w<CR>:call RunAllSpecs()<CR>
+map <leader>tt :w<CR>:call RunCurrentSpecFile()<CR>
+map <leader>tl :w<CR>:call RunNearestSpec()<CR>
 map <leader>rrt :call RunCurrentTestNoZeus()<CR>
 map <leader>rrl :call RunCurrentLineInTestNoZeus()<CR>
 map <leader>rj :!~/Code/chrome-reload<CR><CR>
@@ -220,17 +228,7 @@ command! Qall qall
 
 command! W w
 command! Wa wall
-
-" deprecated? must check new docs.
-autocmd User Rails Rnavcommand presenter app/presenters -glob=**/* -suffix=.rb
-
-" Set up some useful Rails.vim bindings for working with Backbone.js
-autocmd User Rails Rnavcommand template    app/assets/templates               -glob=**/*  -suffix=.jst.ejs
-autocmd User Rails Rnavcommand jmodel      app/assets/javascripts/models      -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jview       app/assets/javascripts/views       -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jcollection app/assets/javascripts/collections -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jrouter     app/assets/javascripts/routers     -glob=**/*  -suffix=.coffee
-autocmd User Rails Rnavcommand jspec       spec/javascripts                   -glob=**/*  -suffix=.coffee
+command! Wq wq
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 " Source: https://github.com/thoughtbot/dotfiles/blob/master/vimrc
