@@ -36,6 +36,10 @@ Bundle 'textobj-user'
 Bundle 'textobj-rubyblock'
 Bundle 'jnwhiteh/vim-golang'
 Bundle 'christoomey/vim-tmux-navigator'
+Bundle 'nathanaelkane/vim-indent-guides'
+Bundle 'heartsentwined/vim-emblem'
+" Bundle 'dsawardekar/portkey'
+" Bundle 'dsawardekar/ember.vim'
 
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
@@ -43,20 +47,30 @@ autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
 " check for external file changes
 autocmd CursorHold,CursorMoved,BufEnter * checktime
 
+autocmd BufRead,BufNewFile *.embl set syntax=emblem
+
 syntax on
 let g:Powerline_symbols = 'fancy'
 let delimitMate_expand_cr = 1
 let delimitMate_expand_space = 1
 let g:nerdtree_tabs_open_on_console_startup = 1
 let g:ctrlp_max_height = 25
-let g:syntastic_check_on_open=1
-let g:rspec_command = 'call SendToTmux(" (test -e .zeus.sock && zeus test {spec}) || (test ! -e .zeus.sock && nocorrect bundle exec rspec {spec})\n")'
+
+" always use the vim pwd as the root for CtrlP
+let g:ctrlp_working_path_mode = ''
+let g:syntastic_check_on_open=0
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+let g:syntastic_html_checkers=['']
+" let g:rspec_command = 'call SendToTmux(" (test -e .zeus.sock && zeus test {spec}) || (test -e .env && test ! -e .zeus.sock && nocorrect foreman run bundle exec rspec {spec}) || (test ! -e .zeus.sock && test ! -e .env && nocorrect bundle exec rspec {spec})\n")'
+let g:rspec_command = 'call SendToTmux(" rspec {spec}\n")'
 let NERDTreeShowHidden=1
 
 filetype plugin indent on
 
 set t_Co=256
 colorscheme grb256
+let g:indent_guides_enable_on_vim_startup = 1
+let g:indent_guides_auto_colors = 0
 
 set splitright
 set splitbelow
@@ -104,10 +118,11 @@ set showmatch
 set wildmenu
 set wildmode=longest,list
 
-let mapleader=","
+let mapleader=" "
 inoremap <c-s> <esc>:w<CR>
 map <c-s> <c-c>:w<CR>
 cmap w!! %!sudo tee > /dev/null %
+map Q :<CR>
 
 " navigate panes with <c-hhkl>
 " nmap <silent> <c-k> :wincmd k<CR>
@@ -115,7 +130,7 @@ cmap w!! %!sudo tee > /dev/null %
 " nmap <silent> <c-h> :wincmd h<CR>
 " nmap <silent> <c-l> :wincmd l<CR>
 
-map <leader>, <C-^>
+map <leader><leader> <C-^>
 
 map <leader>. :noh<CR>
 map <leader>n :NERDTreeTabsToggle<CR>
@@ -129,7 +144,7 @@ map <F9> <Plug>(xmpfilter-mark)
 nnoremap p p=`]`<esc>
 
 if $TMUX != ""
-  nmap <leader>ggf :call SendToTmux("ggf && ggmc\n")<CR>
+  " nmap <leader>ggf :call SendToTmux("ggf && ggmc\n")<CR>
   nmap <leader>gp :call SendToTmux("gpoc\n")<CR>
   map <leader>bi :call SendToTmux("bundle\n")<CR>
   map <leader>rz :!tmux send-keys -tzeus C-c zeus space start enter<CR><CR>
@@ -152,8 +167,6 @@ nmap <leader>bx :!bundle exec<space>
 nmap <leader>zx :!zeus<space>
 map <leader>vbi :BundleInstall<CR>
 map <leader>vbu :BundleUpdate<CR>
-
-nmap <leader>o ddko
 
 
 map <leader>vi :tabe ~/.vimrc<CR>
@@ -191,6 +204,7 @@ map <leader>rm <Plug>SetTmuxVars
 map <leader>ta :w<CR>:call RunAllSpecs()<CR>
 map <leader>tt :w<CR>:call RunCurrentSpecFile()<CR>
 map <leader>tl :w<CR>:call RunNearestSpec()<CR>
+map <leader>tc :!open coverage/index.html<CR><CR>:echo "Opening Test Coverage report"<CR>
 map <leader>rrt :call RunCurrentTestNoZeus()<CR>
 map <leader>rrl :call RunCurrentLineInTestNoZeus()<CR>
 map <leader>rj :!~/Code/chrome-reload<CR><CR>
@@ -217,7 +231,7 @@ map <leader>rp :!touch tmp/restart.txt<CR><CR>:echo "Restarted server"<CR>
 
 " select the current method in ruby (or it block in rspec)
 map <leader>sm /end<CR>?\<def\>\\|\<it\><CR>:noh<CR>V%
-map <leader>sf :e spec/factories/
+map <leader>sf :CtrlP spec/factories/<CR>
 
 " j and k navigate through wrapped lines
 nmap k gk
