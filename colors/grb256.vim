@@ -23,7 +23,7 @@ hi SpellBad       guifg=white       guibg=#FF6C60     gui=BOLD      ctermfg=16  
 " ir_black doesn't highlight operators for some reason
 hi Operator        guifg=#6699CC     guibg=NONE        gui=NONE      ctermfg=lightblue   ctermbg=NONE        cterm=NONE
 
-hi IndentGuidesEven ctermbg=232
+hi IndentGuidesEven ctermbg=233
 
 highlight DiffAdd term=reverse cterm=bold ctermbg=lightgreen ctermfg=16
 highlight DiffChange term=reverse cterm=bold ctermbg=lightblue ctermfg=16

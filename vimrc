@@ -24,8 +24,6 @@ Bundle 'godlygeek/tabular'
 Bundle 'Lokaltog/vim-powerline'
 Bundle 'jistr/vim-nerdtree-tabs'
 Bundle 'terryma/vim-multiple-cursors'
-Bundle 'guns/vim-clojure-static'
-Bundle 'tpope/vim-fireplace'
 Bundle 'jwhitley/vim-matchit'
 Bundle 't9md/vim-ruby-xmpfilter'
 Bundle 'michaeljsmith/vim-indent-object'
@@ -34,12 +32,10 @@ Bundle 'jgdavey/tslime.vim'
 Bundle 'csexton/trailertrash.vim'
 Bundle 'textobj-user'
 Bundle 'textobj-rubyblock'
-Bundle 'jnwhiteh/vim-golang'
 Bundle 'christoomey/vim-tmux-navigator'
 Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'heartsentwined/vim-emblem'
-" Bundle 'dsawardekar/portkey'
-" Bundle 'dsawardekar/ember.vim'
+Bundle 'pangloss/vim-javascript'
 
 " autoindent with two spaces, always expand tabs
 autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
@@ -48,6 +44,9 @@ autocmd BufNewFile,BufReadPost * set ai ts=2 sw=2 sts=2 et
 autocmd CursorHold,CursorMoved,BufEnter * checktime
 
 autocmd BufRead,BufNewFile *.embl set syntax=emblem
+
+au BufRead,BufNewFile *.pde set filetype=arduino
+au BufRead,BufNewFile *.ino set filetype=arduino
 
 syntax on
 let g:Powerline_symbols = 'fancy'
@@ -71,6 +70,7 @@ set t_Co=256
 colorscheme grb256
 let g:indent_guides_enable_on_vim_startup = 1
 let g:indent_guides_auto_colors = 0
+let g:indent_guides_guide_size = 1
 
 set splitright
 set splitbelow
